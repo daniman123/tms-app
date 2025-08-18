@@ -1,5 +1,5 @@
 export interface IBaseTemplate {
-  sampleTextProp: String;
+  sampleTextProp: string;
 }
 
 const BaseTemplate: React.FC<IBaseTemplate> = ({ sampleTextProp }) => {
