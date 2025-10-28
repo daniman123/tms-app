@@ -3,7 +3,11 @@ export interface IPrimaryLayout {
 }
 
 const PrimaryLayout = ({ children }: IPrimaryLayout) => {
-  return <main className="">{children}</main>;
+  return (
+    <div className="grid items-center justify-items-center min-h-screen">
+      <main className="max-w-[1128px]">{children}</main>
+    </div>
+  );
 };
 
 export default PrimaryLayout;
