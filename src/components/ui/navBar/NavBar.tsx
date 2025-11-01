@@ -1,39 +1,109 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export interface INavBar {
   exampleProp: string;
 }
 
-const NavBar = () => {
+export interface INavBarButton {
+  buttonLabel: string;
+  buttonHref: string;
+}
+
+const NavBarDesktop = () => {
+  return (
+    <ul className="relative hidden sm:flex max-w-[1128px] mx-auto justify-center items-center gap-2">
+      <NavBarButtonDesktop buttonLabel="Home" buttonHref="/" />
+      <NavBarButtonDesktop buttonLabel="Booking" buttonHref="/booking" />
+      <NavBarButtonDesktop buttonLabel="About" buttonHref="/about" />
+    </ul>
+  );
+};
+
+const NavBarButtonDesktop = ({ buttonLabel, buttonHref }: INavBarButton) => {
+  const pathname = usePathname();
+  const isActive = pathname === buttonHref;
+
+  return (
+    <li className="h-9">
+      <Link
+        href={buttonHref}
+        className="group relative flex h-full items-center p-2 rounded-xs"
+      >
+        {buttonLabel}
+        <span
+          className={`absolute bottom-0 left-0 h-[2px] bg-black transition-all duration-500 ease-in-out
+            ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+        />
+      </Link>
+    </li>
+  );
+};
+
+const NavBarMobile = () => {
   const [isMenuToggled, setIsMenuToggled] = useState(false);
 
   return (
-    <nav className="top-0 sticky min-h-14 p-[1em] shadow-2xl">
-      <section
-        id="nav-content-container"
-        className="relative max-w-[1128px] max-h-14 flex mx-auto px-1"
-      >
-        <div id="nav-logo" className="">
-          TMS
-        </div>
+    <ul className="relative sm:hidden">
+      <NavBarToggleButton
+        isMenuToggled={isMenuToggled}
+        setIsMenuToggled={setIsMenuToggled}
+      />
+      {isMenuToggled ? (
+        <>
+          <NavBarButtonMobile buttonLabel="Home" buttonHref="/" />
+          <NavBarButtonMobile buttonLabel="Booking" buttonHref="/booking" />
+          <NavBarButtonMobile buttonLabel="About" buttonHref="/about" />
+        </>
+      ) : (
+        <></>
+      )}
+    </ul>
+  );
+};
 
-        <div id="nav-btns" className="hidden sm:flex gap-2 mx-auto">
-          <div className="px-1 cursor-pointer opacity-85 hover:opacity-100">
-            Home
-          </div>
-          <div className="px-1 cursor-pointer opacity-85 hover:opacity-100">
-            About
-          </div>
-          <div className="px-1 cursor-pointer opacity-85 hover:opacity-100">
-            Contact
-          </div>
-        </div>
-        <div id="nav-lang" className="hidden sm:block">
-          LANG
-        </div>
-      </section>
+interface INavBarToggleButton {
+  isMenuToggled: boolean;
+  setIsMenuToggled: Dispatch<SetStateAction<boolean>>;
+}
+
+const NavBarToggleButton = ({
+  isMenuToggled,
+  setIsMenuToggled,
+}: INavBarToggleButton) => {
+  return <button onClick={() => setIsMenuToggled(!isMenuToggled)}>show</button>;
+};
+
+const NavBarButtonMobile = ({ buttonLabel, buttonHref }: INavBarButton) => {
+  const pathname = usePathname();
+  const isActive = pathname === buttonHref;
+
+  return (
+    <li className="h-9">
+      <Link
+        href={buttonHref}
+        className="group relative flex h-full items-center p-2 rounded-xs"
+      >
+        {buttonLabel}
+        <span
+          className={`absolute bottom-0 left-0 h-[2px] bg-black
+            ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+        />
+      </Link>
+    </li>
+  );
+};
+
+const NavBar = () => {
+  return (
+    <nav className="top-0 sticky w-full p-[1em] shadow-2xl">
+      {/* Desktop */}
+      <NavBarDesktop />
+      {/* Mobile */}
+      <NavBarMobile />
     </nav>
   );
 };
