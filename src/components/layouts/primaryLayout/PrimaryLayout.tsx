@@ -8,7 +8,9 @@ const PrimaryLayout = ({ children }: IPrimaryLayout) => {
   return (
     <>
       <NavBar />
-      <main className="max-w-[1028px] mx-auto px-4 py-8">{children}</main>
+      <main className="max-w-[1128px] mx-auto my-9 px-4 sm:px-8">
+        {children}
+      </main>
       <footer className="bg-violet-200 p-[2em]">Footer</footer>
     </>
   );
