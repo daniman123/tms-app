@@ -1,109 +1,147 @@
 "use client";
-
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface INavBar {
   exampleProp: string;
 }
 
-export interface INavBarButton {
-  buttonLabel: string;
-  buttonHref: string;
+interface INavBarListItem {
+  itemLabel: string;
+  anchorHref: string;
+  customStylesListItem: string;
+  customStylesAnchorTag: string;
+  pathname: string;
 }
-
-const NavBarDesktop = () => {
-  return (
-    <ul className="relative hidden sm:flex max-w-[1128px] mx-auto justify-center items-center gap-2">
-      <NavBarButtonDesktop buttonLabel="Home" buttonHref="/" />
-      <NavBarButtonDesktop buttonLabel="Booking" buttonHref="/booking" />
-      <NavBarButtonDesktop buttonLabel="About" buttonHref="/about" />
-    </ul>
-  );
-};
-
-const NavBarButtonDesktop = ({ buttonLabel, buttonHref }: INavBarButton) => {
-  const pathname = usePathname();
-  const isActive = pathname === buttonHref;
+export const NavBarListItem = ({
+  itemLabel,
+  anchorHref,
+  customStylesListItem,
+  customStylesAnchorTag,
+  pathname,
+}: INavBarListItem) => {
+  const isActive = pathname === anchorHref;
 
   return (
-    <li className="h-9">
+    <li className={`h-[50px] first:mr-auto ${customStylesListItem}`}>
       <Link
-        href={buttonHref}
-        className="group relative flex h-full items-center p-2 rounded-xs"
+        href={anchorHref}
+        className={`h-full px-7 flex items-center text-black rounded-xs ${isActive ? "bg-[#f0f0f0]" : ""} hover:bg-[#f0f0f0] ${customStylesAnchorTag}`}
       >
-        {buttonLabel}
-        <span
-          className={`absolute bottom-0 left-0 h-[2px] bg-black transition-all duration-500 ease-in-out
-            ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
-        />
-      </Link>
-    </li>
-  );
-};
-
-const NavBarMobile = () => {
-  const [isMenuToggled, setIsMenuToggled] = useState(false);
-
-  return (
-    <ul className="relative sm:hidden">
-      <NavBarToggleButton
-        isMenuToggled={isMenuToggled}
-        setIsMenuToggled={setIsMenuToggled}
-      />
-      {isMenuToggled ? (
-        <>
-          <NavBarButtonMobile buttonLabel="Home" buttonHref="/" />
-          <NavBarButtonMobile buttonLabel="Booking" buttonHref="/booking" />
-          <NavBarButtonMobile buttonLabel="About" buttonHref="/about" />
-        </>
-      ) : (
-        <></>
-      )}
-    </ul>
-  );
-};
-
-interface INavBarToggleButton {
-  isMenuToggled: boolean;
-  setIsMenuToggled: Dispatch<SetStateAction<boolean>>;
-}
-
-const NavBarToggleButton = ({
-  isMenuToggled,
-  setIsMenuToggled,
-}: INavBarToggleButton) => {
-  return <button onClick={() => setIsMenuToggled(!isMenuToggled)}>show</button>;
-};
-
-const NavBarButtonMobile = ({ buttonLabel, buttonHref }: INavBarButton) => {
-  const pathname = usePathname();
-  const isActive = pathname === buttonHref;
-
-  return (
-    <li className="h-9">
-      <Link
-        href={buttonHref}
-        className="group relative flex h-full items-center p-2 rounded-xs"
-      >
-        {buttonLabel}
-        <span
-          className={`absolute bottom-0 left-0 h-[2px] bg-black
-            ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
-        />
+        {itemLabel}
       </Link>
     </li>
   );
 };
 
 const NavBar = () => {
+  const [isMenuToggled, setIsMenuToggled] = useState(false);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    console.log(pathname);
+
+    setIsMenuToggled(false);
+  }, [pathname]);
+
   return (
-    <nav className="top-0 sticky w-full p-[1em] shadow-2xl">
-      {/* Desktop */}
-      <NavBarDesktop />
+    <nav className="top-0 sticky w-full p-[1em] bg-white shadow-2xl">
       {/* Mobile */}
-      <NavBarMobile />
+      {isMenuToggled ? (
+        <ul
+          id="sidebar"
+          className="max-w-[1128px] flex justify-end items-center fixed top-0 right-0 h-dvh w-full z-[99999] bg-white flex flex-col items-start justify-start"
+        >
+          <Image
+            src={"/close_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg"}
+            alt=""
+            height={26}
+            width={26}
+            onClick={() => setIsMenuToggled(false)}
+            className="cursor-pointer m-8"
+          />
+          <NavBarListItem
+            itemLabel="Home"
+            anchorHref="/"
+            customStylesListItem="w-full"
+            customStylesAnchorTag="w-full"
+            pathname={pathname}
+          />
+          <NavBarListItem
+            itemLabel="Booking"
+            anchorHref="booking"
+            customStylesListItem="w-full"
+            customStylesAnchorTag="w-full"
+            pathname={pathname}
+          />
+          <NavBarListItem
+            itemLabel="About"
+            anchorHref="about"
+            customStylesListItem="w-full"
+            customStylesAnchorTag="w-full"
+            pathname={pathname}
+          />
+          <NavBarListItem
+            itemLabel="Lang"
+            anchorHref="/lang"
+            customStylesListItem="w-full"
+            customStylesAnchorTag="w-full"
+            pathname={pathname}
+          />
+        </ul>
+      ) : (
+        <></>
+      )}
+
+      {/* Desktop */}
+      <ul className="w-full max-w-[1128px] flex justify-end items-center">
+        <NavBarListItem
+          itemLabel="TMS"
+          anchorHref="/"
+          customStylesListItem=""
+          customStylesAnchorTag="hover:bg-white"
+          pathname=""
+        />
+        <NavBarListItem
+          itemLabel="Home"
+          anchorHref="/"
+          customStylesListItem="hidden sm:block"
+          customStylesAnchorTag=""
+          pathname={pathname}
+        />
+        <NavBarListItem
+          itemLabel="Booking"
+          anchorHref="booking"
+          customStylesListItem="hidden sm:block"
+          customStylesAnchorTag=""
+          pathname={pathname}
+        />
+        <NavBarListItem
+          itemLabel="About"
+          anchorHref="about"
+          customStylesListItem="hidden sm:block"
+          customStylesAnchorTag=""
+          pathname={pathname}
+        />
+        <NavBarListItem
+          itemLabel="Lang"
+          anchorHref="/lang"
+          customStylesListItem="hidden sm:block"
+          customStylesAnchorTag=""
+          pathname={pathname}
+        />
+        <Image
+          src={"/menu_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg"}
+          alt=""
+          height={26}
+          width={26}
+          onClick={() => setIsMenuToggled(true)}
+          className="sm:hidden cursor-pointer"
+        />
+      </ul>
     </nav>
   );
 };
