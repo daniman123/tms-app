@@ -48,12 +48,12 @@ const NavBar = () => {
   }, [pathname]);
 
   return (
-    <nav className="top-0 sticky w-full p-[1em] bg-white shadow-2xl">
+    <nav className="top-0 sticky w-full p-[1em] bg-white shadow-2xl z-10">
       {/* Mobile */}
       {isMenuToggled ? (
         <ul
           id="sidebar"
-          className="max-w-[1128px] flex justify-end items-center fixed top-0 right-0 h-dvh w-full z-[99999] bg-white flex flex-col items-start justify-start"
+          className="max-w-[1128px] flex justify-end items-center fixed top-0 right-0 h-dvh w-full bg-white flex flex-col items-start justify-start"
         >
           <Image
             src={"/close_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg"}
