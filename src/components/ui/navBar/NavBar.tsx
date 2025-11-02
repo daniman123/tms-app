@@ -25,7 +25,7 @@ export const NavBarListItem = ({
   const isActive = pathname === anchorHref;
 
   return (
-    <li className={`h-[50px] first:mr-auto ${customStylesListItem}`}>
+    <li className={`h-[36px] first:mr-auto ${customStylesListItem}`}>
       <Link
         href={anchorHref}
         className={`h-full px-7 flex items-center text-black rounded-xs ${isActive ? "bg-[#f0f0f0]" : ""} hover:bg-[#f0f0f0] ${customStylesAnchorTag}`}
